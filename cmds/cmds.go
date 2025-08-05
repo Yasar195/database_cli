@@ -38,6 +38,7 @@ func getSupportedDatabases() *cobra.Command {
 		Short: "List's all the supported database engines",
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println("Supported database engines:")
+
 			for _, db := range supported_databases {
 				fmt.Println(db)
 			}
