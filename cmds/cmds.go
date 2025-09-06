@@ -1,14 +1,12 @@
 package cmds
 
 import (
+	"database_backup_tool/databases"
+	systems "database_backup_tool/system"
 	"fmt"
 
 	"github.com/spf13/cobra"
 )
-
-var supported_databases = []string{
-	"postgreSQL",
-}
 
 func GetRootCmd() *cobra.Command {
 
@@ -21,29 +19,20 @@ func GetRootCmd() *cobra.Command {
 		},
 	}
 
-	rootCmd.AddCommand(getSupportedDatabases())
+	rootCmd.AddCommand(getDatabasecmd())
 	rootCmd.AddCommand(getSystemFunctions())
 
 	return rootCmd
 }
 
-func getSupportedDatabases() *cobra.Command {
+func getDatabasecmd() *cobra.Command {
 	dbCmd := &cobra.Command{
 		Use:   "db",
-		Short: "Databse related cli utilities",
+		Short: "Database related cli utilities",
 	}
 
-	dbCmd.AddCommand(&cobra.Command{
-		Use:   "list",
-		Short: "List's all the supported database engines",
-		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println("Supported database engines:")
-
-			for _, db := range supported_databases {
-				fmt.Println(db)
-			}
-		},
-	})
+	dbCmd.AddCommand(databases.GetSupportedDatabases())
+	dbCmd.AddCommand(databases.CheckDatabaseConnectivity())
 
 	return dbCmd
 }
@@ -54,13 +43,7 @@ func getSystemFunctions() *cobra.Command {
 		Short: "Internal system commands",
 	}
 
-	systemCmd.AddCommand(&cobra.Command{
-		Use:   "update",
-		Short: "System update command",
-		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println("Checking for updates...")
-		},
-	})
+	systemCmd.AddCommand(systems.CheckForUpdates())
 
 	return systemCmd
 }
